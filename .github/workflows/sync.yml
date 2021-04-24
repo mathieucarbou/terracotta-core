@@ -1,0 +1,24 @@
+name: Sync
+on:
+  schedule:
+    - cron:  '0 * * * *'
+  workflow_dispatch:
+jobs:
+  sync-master:
+    runs-on: ubuntu-latest
+    name: "Sync from Terracotta-OSS/terracotta-core@master"
+    steps:
+    - name: "Checkout: master"
+      uses: actions/checkout@v2
+      with:
+        ref: master
+    - name: "Update: master"
+      id: sync-master
+      uses: aormsby/Fork-Sync-With-Upstream-action@v2.3
+      with:
+        upstream_repository: Terracotta-OSS/terracotta-core
+        upstream_branch: master
+        target_branch: master
+        git_pull_args: --ff-only
+    - name: Timestamp
+      run: date
